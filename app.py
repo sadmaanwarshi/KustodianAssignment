@@ -4,27 +4,19 @@ import pandas as pd
 import firebase_admin
 from firebase_admin import credentials, db
 from io import BytesIO
-import os
-import json
 
 # Initialize Firebase
-firebase_creds = os.getenv("FIREBASE_CREDENTIALS")
-
-if firebase_creds:
-    cred_dict = json.loads(firebase_creds)
-    cred = credentials.Certificate(cred_dict)
-    firebase_admin.initialize_app(cred, {
-        'databaseURL': 'https://localdbtest-fab29-default-rtdb.asia-southeast1.firebasedatabase.app/'
-    })
-else:
-    raise ValueError("FIREBASE_CREDENTIALS environment variable is not set")
+cred = credentials.Certificate("credentials.json")
+firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://localdbtest-fab29-default-rtdb.asia-southeast1.firebasedatabase.app/'
+})
 
 app = FastAPI()
 
 # ✅ Enable CORS for React frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://sadmaanwarshi.github.io/assignment"],  # Allow only your React frontend
+    allow_origins=["http://localhost:5173"],  # Allow only your React frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
